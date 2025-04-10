@@ -53,6 +53,21 @@ class GameState:
             unit.move(moveTankCommand)
 
 class UserInterface:
+    #properties
+    @property
+    def worldWidth(self):
+        return int(self.gameState.worldSize.x)
+    @property
+    def worldHeight(self):
+        return int(self.gameState.worldSize.y)
+    @property
+    def cellWidth(self):
+        return int(self.cellSize.x)
+    @property
+    def cellHeight(self):
+        return int(self.cellSize.y)
+
+    #rest of the class
     def __init__(self):
         pygame.init()
 
@@ -101,7 +116,7 @@ class UserInterface:
 
         #texture
         texturePoint = tile.elementwise() * self.cellSize
-        textureRect = pygame.Rect(int(texturePoint.x), int(texturePoint.y), int(self.cellSize.x), int(self.cellSize.y))
+        textureRect = pygame.Rect(int(texturePoint.x), int(texturePoint.y), self.cellWidth, self.cellHeight)
         self.window.blit(self.groundTexture, spritePoint, textureRect)
 
     def renderUnit(self, unit):
@@ -110,18 +125,18 @@ class UserInterface:
 
         #unit texture
         texturePoint = unit.tile.elementwise() * self.cellSize
-        textureRect = pygame.Rect(int(texturePoint.x), int(texturePoint.y), int(self.cellSize.x), int(self.cellSize.y))
+        textureRect = pygame.Rect(int(texturePoint.x), int(texturePoint.y), self.cellWidth, self.cellHeight)
         self.window.blit(self.unitsTexture, spritePoint, textureRect)
 
         #weapon texture
         texturePoint = Vector2(0,6).elementwise() * self.cellSize
-        textureRect = pygame.Rect(int(texturePoint.x), int(texturePoint.y), int(self.cellSize.x), int(self.cellSize.y))
+        textureRect = pygame.Rect(int(texturePoint.x), int(texturePoint.y), self.cellWidth, self.cellHeight)
         self.window.blit(self.unitsTexture, spritePoint, textureRect)
 
     def render(self):
         self.window.fill((0, 0, 0))
-        for y in range(int(self.gameState.worldSize.y)):
-            for x in range(int(self.gameState.worldSize.x)):
+        for y in range(self.worldHeight):
+            for x in range(self.worldWidth):
                 self.renderGround(Vector2(x,y),self.gameState.ground[y][x])
         for unit in self.gameState.units:
             self.renderUnit(unit)
